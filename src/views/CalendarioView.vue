@@ -12,12 +12,16 @@
     <template v-else>
       <div class="leyenda">
         <div class="item-leyenda" v-for="(tipo, key) in tiposBase" :key="key">
-          <span class="color-dot" :style="{ backgroundColor: tipo.color }"></span>
+          <span class="color-dot" :class="`dot-${tipo.shade}`"></span>
           <span>{{ tipo.nombre }}</span>
         </div>
         <div class="item-leyenda">
           <span class="color-dot" :style="{ backgroundColor: 'var(--color-vacaciones)' }"></span>
           <span>Vacaciones</span>
+        </div>
+        <div class="item-leyenda">
+          <span class="color-dot dot-feriado"></span>
+          <span>Feriado</span>
         </div>
         <div class="item-leyenda">
           <span class="color-dot extra-dot"></span>
@@ -71,6 +75,8 @@ function cerrarModal() {
 }
 </script>
 
+<style src="@/components/calendar/calendar-theme.css"></style>
+
 <style scoped>
 .calendario-view {
   padding: 1.5rem 0.75rem;
@@ -108,6 +114,25 @@ function cerrarModal() {
   height: 10px;
   border-radius: 50%;
   display: inline-block;
+  flex-shrink: 0;
+}
+
+.color-dot.dot-dia {
+  background: linear-gradient(135deg, var(--cal-dia-from), var(--cal-dia-to));
+}
+
+.color-dot.dot-noche {
+  background: linear-gradient(135deg, var(--cal-noche-from), var(--cal-noche-to));
+}
+
+.color-dot.dot-descanso {
+  background: transparent;
+  border: 1.5px dashed #555;
+}
+
+.color-dot.dot-feriado {
+  background-color: var(--cal-feriado);
+  border-radius: 4px;
 }
 
 .extra-dot {

@@ -11,6 +11,10 @@
   >
     <span class="dia-numero">{{ numeroDia }}</span>
 
+    <span v-if="feriado" class="badge-feriado" :title="feriado.nombre">
+      <img src="/info.svg" alt="" class="badge-feriado-icon" aria-hidden="true" />
+    </span>
+
     <!-- Icono de turno: sol o luna SVG -->
     <span v-if="turno" class="turno-icon">
       <!-- Día -->
@@ -26,13 +30,7 @@
         <path d="M21.25 12C21.25 17.11 17.11 21.25 12 21.25C6.89 21.25 2.75 17.11 2.75 12C2.75 6.89 6.89 2.75 12 2.75"/>
         <path d="M15.5 14.25C12.32 14.25 9.75 11.68 9.75 8.5C9.75 6.41 10.86 4.58 12.53 3.57"/>
       </svg>
-      <!-- Vacaciones -->
-      <svg v-else-if="turno.id === 'V'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M17.5 8C17.5 8 19 9.5 19 11.5C19 13.5 17.5 15 17.5 15"/>
-        <path d="M6.5 8C6.5 8 5 9.5 5 11.5C5 13.5 6.5 15 6.5 15"/>
-        <circle cx="12" cy="12" r="3"/>
-        <path d="M12 3V5M12 19V21M3 12H5M19 12H21"/>
-      </svg>
+      <img v-else-if="turno.id === 'V'" src="/sleeping.svg" alt="Vacaciones" class="icon-img" />
     </span>
 
     <div v-if="tieneExtra" class="badge-extra"></div>
@@ -47,7 +45,8 @@ const props = defineProps({
   fecha:      { type: Date,    required: true },
   mesActual:  { type: Date,    required: true },
   turno:      { type: Object,  default: null  },
-  tieneExtra: { type: Boolean, default: false }
+  tieneExtra: { type: Boolean, default: false },
+  feriado:    { type: Object,  default: null  }
 })
 
 defineEmits(['seleccionar'])
@@ -60,7 +59,7 @@ const esMesActual = computed(() => isSameMonth(props.fecha, props.mesActual))
 <style scoped>
 .dia-turno {
   aspect-ratio: 1;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid var(--color-primary-light);
   background-color: var(--bg-card);
   color: var(--text-primary);
@@ -80,21 +79,27 @@ const esMesActual = computed(() => isSameMonth(props.fecha, props.mesActual))
 
 .dia-turno.is-other-month { opacity: 0.25; }
 
-/* "Hoy" — borde blanco nítido */
+/* "Hoy" */
 .dia-turno.is-today {
-  box-shadow: inset 0 0 0 2px var(--text-primary);
+  box-shadow:
+    inset 0 0 0 2px #fff,
+    0 0 0 1px rgba(255, 255, 255, 0.25);
 }
 
-/* ── Shade classes: sólo tonos de gris ── */
-/* Día → ligeramente más claro que la tarjeta base */
+/* Día — tonos cálidos (lado derecho de la mariposa) */
 .dia-turno.shade-dia {
-  background-color: #323232;
+  background: linear-gradient(155deg, var(--cal-dia-from) 0%, var(--cal-dia-mid) 52%, var(--cal-dia-to) 100%);
+  border-color: rgba(255, 179, 161, 0.35);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-/* Noche → más oscuro, casi negro */
+/* Noche — tonos fríos (lado izquierdo de la mariposa) */
 .dia-turno.shade-noche {
-  background-color: #1a1a1a;
-  border-color: #3a3a3a;
+  background: linear-gradient(155deg, var(--cal-noche-from) 0%, var(--cal-noche-mid) 48%, var(--cal-noche-to) 100%);
+  border-color: rgba(155, 102, 255, 0.35);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 /* Descanso → borde punteado, fondo transparente */
@@ -138,16 +143,40 @@ const esMesActual = computed(() => isSameMonth(props.fecha, props.mesActual))
   height: 100%;
 }
 
-/* Día → ícono más brillante */
-.shade-dia .turno-icon { color: var(--text-primary); }
+.turno-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 
-/* Noche → ícono tenue */
-.shade-noche .turno-icon { color: #666; }
+.shade-dia .turno-icon,
+.shade-noche .turno-icon {
+  color: rgba(255, 255, 255, 0.95);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
+}
 
-/* Vacaciones → ícono visible */
-.shade-vacaciones .turno-icon { color: var(--text-secondary); }
+.shade-vacaciones .turno-icon {
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
+}
 
-/* Badge de extra — esquina triangular blanca */
+.badge-feriado {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-feriado-icon {
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45));
+}
+
+/* Badge de extra — esquina inferior derecha */
 .badge-extra {
   position: absolute;
   bottom: 0;

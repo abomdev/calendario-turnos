@@ -86,7 +86,6 @@ async function manejarToggleNotificaciones(e) {
 <style scoped>
 .configuracion-view {
   padding: 1.5rem;
-  padding-bottom: 5rem; /* Evitar que el nav tape el contenido */
 }
 
 .header h1 {

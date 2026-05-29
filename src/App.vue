@@ -22,12 +22,13 @@ onMounted(() => {
 .app-layout {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
 }
 
 .app-layout > *:first-child {
   flex: 1;
   overflow-y: auto;
+  padding-bottom: 5.5rem; /* espacio para la barra flotante */
 }
 </style>

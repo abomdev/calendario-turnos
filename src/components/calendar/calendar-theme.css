@@ -1,0 +1,14 @@
+/* Paleta mariposa — calendario y dashboard */
+.calendario-mensual,
+.calendario-view,
+.dashboard-view {
+  --cal-dia-from: #ffb3a1;
+  --cal-dia-mid: #f06b8a;
+  --cal-dia-to: #e63950;
+  --cal-noche-from: #9b66ff;
+  --cal-noche-mid: #6d7ef5;
+  --cal-noche-to: #3d79f2;
+  --cal-bg-panel: #23273a;
+  --cal-feriado: #e8b84a;
+  --cal-feriado-bg: rgba(232, 184, 74, 0.2);
+}

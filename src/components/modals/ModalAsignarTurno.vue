@@ -8,6 +8,14 @@
         </button>
       </div>
 
+      <div v-if="feriado" class="feriado-info">
+        <p class="etiqueta">FERIADO LEGAL</p>
+        <div class="feriado-badge">
+          {{ feriado.nombre }}
+          <span v-if="feriado.irrenunciable" class="feriado-tag">Irrenunciable</span>
+        </div>
+      </div>
+
       <div class="turno-base-info" v-if="esVacaciones">
         <p class="etiqueta">ESTADO DEL DÍA</p>
         <div class="turno-badge vacaciones-badge">
@@ -19,7 +27,7 @@
       <template v-else>
         <div class="turno-base-info" v-if="turnoBase">
           <p class="etiqueta">TURNO BASE (CICLO)</p>
-          <div class="turno-badge" :style="{ backgroundColor: turnoBase.color, color: (turnoBase.id === 'D' || turnoBase.id === 'ED') ? 'var(--bg-color)' : '#fff' }">
+          <div class="turno-badge" :style="turnoBaseStyle">
             {{ turnoBase.nombre }}
           </div>
         </div>
@@ -53,6 +61,7 @@
               v-if="turnoExtraId"
               @click="quitarExtra"
             >
+              <img src="/trash.svg" alt="" class="btn-quitar-icon" aria-hidden="true" />
               Quitar Extra
             </button>
           </div>
@@ -71,6 +80,7 @@ import { useTurnosStore } from '@/stores/turnosStore'
 import { useConfigStore } from '@/stores/configStore'
 import { obtenerTurnoBase } from '@/utils/generadorCiclo'
 import { TIPOS_TURNO } from '@/utils/turnos'
+import { getFeriado } from '@/utils/feriados'
 
 const props = defineProps({
   visible: Boolean,
@@ -92,6 +102,11 @@ const fechaStr = computed(() => {
   return format(props.fecha, 'yyyy-MM-dd')
 })
 
+const feriado = computed(() => {
+  if (!props.fecha) return null
+  return getFeriado(props.fecha)
+})
+
 const esVacaciones = computed(() => {
   if (!fechaStr.value) return false
   return turnosStore.vacaciones.some(v => {
@@ -110,6 +125,39 @@ const turnoExtraId = computed(() => {
   return turnosStore.turnosExtra[fechaStr.value]
 })
 
+const turnoBaseStyle = computed(() => {
+  if (!turnoBase.value) return {}
+
+  if (turnoBase.value.shade === 'dia') {
+    return {
+      background: 'linear-gradient(135deg, var(--cal-dia-from), var(--cal-dia-to))',
+      color: '#ffffff',
+      border: '1px solid rgba(255, 179, 161, 0.35)'
+    }
+  }
+
+  if (turnoBase.value.shade === 'noche') {
+    return {
+      background: 'linear-gradient(135deg, var(--cal-noche-from), var(--cal-noche-to))',
+      color: '#ffffff',
+      border: '1px solid rgba(155, 102, 255, 0.35)'
+    }
+  }
+
+  if (turnoBase.value.shade === 'descanso') {
+    return {
+      backgroundColor: 'transparent',
+      color: 'var(--text-secondary)',
+      border: '1px dashed #555'
+    }
+  }
+
+  return {
+    backgroundColor: 'var(--color-primary-light)',
+    color: 'var(--text-primary)'
+  }
+})
+
 function cerrar() {
   emit('close')
 }
@@ -125,6 +173,8 @@ function quitarExtra() {
 }
 </script>
 
+<style src="@/components/calendar/calendar-theme.css"></style>
+
 <style scoped>
 .modal-overlay {
   position: fixed;
@@ -134,7 +184,7 @@ function quitarExtra() {
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
-  z-index: 100;
+  z-index: 300;
   display: flex;
   align-items: flex-end;
 }
@@ -145,7 +195,7 @@ function quitarExtra() {
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
   padding: 1.5rem;
-  padding-bottom: 3rem; /* padding extra for bottom nav if overlapping */
+  padding-bottom: 1.25rem;
   box-shadow: 0 -10px 25px rgba(0,0,0,0.5);
   animation: slideUp 0.3s ease-out;
 }
@@ -188,6 +238,34 @@ function quitarExtra() {
   letter-spacing: 1px;
   color: var(--text-secondary);
   margin-bottom: 0.5rem;
+}
+
+.feriado-info {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: var(--cal-feriado-bg);
+  border: 1px solid rgba(232, 184, 74, 0.45);
+  border-radius: 12px;
+}
+
+.feriado-badge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--cal-feriado);
+}
+
+.feriado-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  background-color: rgba(232, 184, 74, 0.25);
+  color: var(--cal-feriado);
 }
 
 .turno-base-info {
@@ -236,8 +314,8 @@ function quitarExtra() {
   /* Extra Dia */
 }
 .btn-extra:nth-child(1).active {
-  background-color: var(--text-primary);
-  border-color: var(--text-primary);
+  background: linear-gradient(135deg, var(--cal-dia-from), var(--cal-dia-to));
+  border-color: rgba(255, 179, 161, 0.35);
   color: #ffffff;
 }
 
@@ -245,20 +323,31 @@ function quitarExtra() {
   /* Extra Noche */
 }
 .btn-extra:nth-child(2).active {
-  background-color: var(--text-primary);
-  border-color: var(--text-primary);
+  background: linear-gradient(135deg, var(--cal-noche-from), var(--cal-noche-to));
+  border-color: rgba(155, 102, 255, 0.35);
   color: #ffffff;
 }
 
 .btn-quitar {
   grid-column: 1 / -1;
-  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: rgba(239, 68, 68, 0.12);
   border-color: #ef4444;
-  color: #ef4444;
+  color: #fca5a5;
+}
+
+.btn-quitar-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  object-fit: contain;
 }
 
 .btn-quitar:active {
-  background-color: rgba(239, 68, 68, 0.1);
+  background-color: rgba(239, 68, 68, 0.22);
 }
 
 .vacaciones-badge {

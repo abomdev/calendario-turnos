@@ -1,0 +1,22 @@
+{
+  "anio": 2026,
+  "pais": "CL",
+  "feriados": [
+    { "fecha": "2026-01-01", "nombre": "Año Nuevo", "irrenunciable": true },
+    { "fecha": "2026-04-03", "nombre": "Viernes Santo", "irrenunciable": false },
+    { "fecha": "2026-04-04", "nombre": "Sábado Santo", "irrenunciable": false },
+    { "fecha": "2026-05-01", "nombre": "Día del Trabajo", "irrenunciable": true },
+    { "fecha": "2026-05-21", "nombre": "Día de las Glorias Navales", "irrenunciable": false },
+    { "fecha": "2026-06-21", "nombre": "Día Nacional de los Pueblos Indígenas", "irrenunciable": false },
+    { "fecha": "2026-06-29", "nombre": "San Pedro y San Pablo", "irrenunciable": false },
+    { "fecha": "2026-07-16", "nombre": "Virgen del Carmen", "irrenunciable": false },
+    { "fecha": "2026-08-15", "nombre": "Asunción de la Virgen", "irrenunciable": false },
+    { "fecha": "2026-09-18", "nombre": "Independencia Nacional", "irrenunciable": true },
+    { "fecha": "2026-09-19", "nombre": "Glorias del Ejército", "irrenunciable": true },
+    { "fecha": "2026-10-12", "nombre": "Encuentro de Dos Mundos", "irrenunciable": false },
+    { "fecha": "2026-10-31", "nombre": "Día de las Iglesias Evangélicas y Protestantes", "irrenunciable": false },
+    { "fecha": "2026-11-01", "nombre": "Día de Todos los Santos", "irrenunciable": false },
+    { "fecha": "2026-12-08", "nombre": "Inmaculada Concepción", "irrenunciable": false },
+    { "fecha": "2026-12-25", "nombre": "Navidad", "irrenunciable": true }
+  ]
+}

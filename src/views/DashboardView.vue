@@ -48,13 +48,14 @@ const saludoDinamico = computed(() => {
 })
 </script>
 
+<style src="@/components/calendar/calendar-theme.css"></style>
+
 <style scoped>
 .dashboard-view {
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  padding-bottom: 5rem; /* Evitar que el nav tape el contenido */
 }
 
 .header .saludo-texto {

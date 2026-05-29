@@ -1,7 +1,6 @@
 <template>
   <div class="proximo-turno" :class="proximoInfo ? `shade-${proximoInfo.turno.shade}` : ''" v-if="proximoInfo">
     <div class="icono-mini">
-      <!-- Sol -->
       <svg v-if="proximoInfo.turno.id === 'D' || proximoInfo.turno.id === 'ED'"
         viewBox="0 0 24 24" fill="none" class="icon-sm"
         stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -9,7 +8,6 @@
         <path d="M10 6.34C10.63 6.12 11.3 6 12 6C15.31 6 18 8.69 18 12C18 13.52 17.43 14.91 16.5 15.97H7.5C6.57 14.91 6 13.52 6 12C6 11.3 6.12 10.63 6.34 10"/>
         <path d="M12 2V3M22 12H21M3 12H2M19.07 4.93L18.68 5.32M5.32 5.32L4.93 4.93"/>
       </svg>
-      <!-- Luna -->
       <svg v-else-if="proximoInfo.turno.id === 'N' || proximoInfo.turno.id === 'EN'"
         viewBox="0 0 24 24" fill="none" class="icon-sm"
         stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -30,7 +28,7 @@
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 
-const props = defineProps({
+defineProps({
   proximoInfo: {
     type: Object,
     default: null
@@ -50,10 +48,15 @@ const props = defineProps({
   border-left: 4px solid #3a3a3a;
 }
 
-/* Día → borde izq. blanco */
-.proximo-turno.shade-dia   { border-left-color: var(--text-primary); }
-/* Noche → borde izq. gris medio */
-.proximo-turno.shade-noche { border-left-color: #555; }
+.proximo-turno.shade-dia {
+  border-color: rgba(255, 179, 161, 0.35);
+  border-left-color: var(--cal-dia-to);
+}
+
+.proximo-turno.shade-noche {
+  border-color: rgba(155, 102, 255, 0.35);
+  border-left-color: var(--cal-noche-from);
+}
 
 .icono-mini {
   width: 44px;
@@ -68,8 +71,17 @@ const props = defineProps({
   color: var(--text-primary);
 }
 
-/* Noche → ícono tenue */
-.shade-noche .icono-mini { color: var(--text-secondary); }
+.shade-dia .icono-mini {
+  background: linear-gradient(135deg, var(--cal-dia-from), var(--cal-dia-to));
+  border-color: rgba(255, 179, 161, 0.35);
+  color: #fff;
+}
+
+.shade-noche .icono-mini {
+  background: linear-gradient(135deg, var(--cal-noche-from), var(--cal-noche-to));
+  border-color: rgba(155, 102, 255, 0.35);
+  color: #fff;
+}
 
 .icon-sm {
   width: 22px;
@@ -95,6 +107,14 @@ const props = defineProps({
   font-weight: 600;
   margin: 0;
   color: var(--text-primary);
+}
+
+.shade-dia .nombre-turno {
+  color: var(--cal-dia-from);
+}
+
+.shade-noche .nombre-turno {
+  color: var(--cal-noche-from);
 }
 
 .fecha-turno {

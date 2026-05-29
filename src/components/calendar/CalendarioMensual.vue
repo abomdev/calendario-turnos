@@ -22,6 +22,7 @@
         :mes-actual="mesActual"
         :turno="dia.turnoEfectivo"
         :tiene-extra="dia.tieneExtra"
+        :feriado="dia.feriado"
         @seleccionar="$emit('seleccionar-dia', $event)"
       />
     </div>
@@ -36,6 +37,7 @@ import { ChevronLeft, ChevronRight } from '@lucide/vue'
 import DiaTurno from './DiaTurno.vue'
 import { useTurnos } from '@/composables/useTurnos'
 import { useTurnosStore } from '@/stores/turnosStore'
+import { getFeriado } from '@/utils/feriados'
 
 const props = defineProps({
   mesActual: {
@@ -72,7 +74,8 @@ const diasGrid = computed(() => {
       return {
         fecha,
         turnoEfectivo,
-        tieneExtra
+        tieneExtra,
+        feriado: getFeriado(fechaStr)
       }
     })
 })
@@ -86,12 +89,14 @@ function mesSiguiente() {
 }
 </script>
 
+<style src="./calendar-theme.css"></style>
+
 <style scoped>
 .calendario-mensual {
-  background-color: var(--bg-card);
+  background-color: var(--cal-bg-panel);
   border-radius: 12px;
   padding: 1rem 0.5rem;
-  border: 1px solid var(--color-primary-light);
+  border: 1px solid rgba(155, 102, 255, 0.2);
 }
 
 .header-calendario {
