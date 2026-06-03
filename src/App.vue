@@ -29,6 +29,6 @@ onMounted(() => {
 .app-layout > *:first-child {
   flex: 1;
   overflow-y: auto;
-  padding-bottom: 5.5rem; /* espacio para la barra flotante */
+  padding-bottom: 6.5rem; /* espacio para la barra flotante con labels */
 }
 </style>

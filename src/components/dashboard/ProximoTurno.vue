@@ -1,5 +1,5 @@
 <template>
-  <div class="proximo-turno" :class="proximoInfo ? `shade-${proximoInfo.turno.shade}` : ''" v-if="proximoInfo">
+  <div class="proximo-turno" :class="[proximoInfo ? `shade-${proximoInfo.turno.shade}` : '', `variant-${variant}`]" v-if="proximoInfo">
     <div class="icono-mini">
       <svg v-if="proximoInfo.turno.id === 'D' || proximoInfo.turno.id === 'ED'"
         viewBox="0 0 24 24" fill="none" class="icon-sm"
@@ -14,13 +14,20 @@
         <path d="M21.25 12C21.25 17.11 17.11 21.25 12 21.25C6.89 21.25 2.75 17.11 2.75 12C2.75 6.89 6.89 2.75 12 2.75"/>
         <path d="M15.5 14.25C12.32 14.25 9.75 11.68 9.75 8.5C9.75 6.41 10.86 4.58 12.53 3.57"/>
       </svg>
+      <img v-else-if="proximoInfo.turno.id === 'L'" src="/tea.svg" alt="Descanso" class="icon-sm icon-img" />
+      <img v-else-if="proximoInfo.turno.id === 'V'" src="/sleeping.svg" alt="Vacaciones" class="icon-sm icon-img" />
+
+      <!-- Badge de extra -->
+      <div v-if="proximoInfo.turno.id === 'ED' || proximoInfo.turno.id === 'EN'" class="badge-extra"></div>
     </div>
 
     <div class="contenido">
       <span class="etiqueta">PRÓXIMO TURNO DE TRABAJO</span>
-      <h3 class="nombre-turno">{{ proximoInfo.turno.nombre }}</h3>
-      <p class="fecha-turno">{{ format(proximoInfo.fecha, "EEEE d 'de' MMMM", { locale: es }) }}</p>
+      <div class="turno-fecha-flex">
+        <h3 class="nombre-turno">{{ proximoInfo.turno.nombre }}</h3>
+      </div>
     </div>
+    
   </div>
 </template>
 
@@ -32,6 +39,10 @@ defineProps({
   proximoInfo: {
     type: Object,
     default: null
+  },
+  variant: {
+    type: String,
+    default: 'card'
   }
 })
 </script>
@@ -39,82 +50,100 @@ defineProps({
 <style scoped>
 .proximo-turno {
   background-color: var(--bg-card);
-  border-radius: 12px;
-  padding: 1.25rem;
+  border-radius: var(--radius-ios-card);
+  padding: 1rem 1.25rem;
   display: flex;
   align-items: center;
   gap: 1rem;
-  border: 1px solid var(--color-primary-light);
-  border-left: 4px solid #3a3a3a;
+  border: 1px solid var(--glass-border);
+  transition: background-color 0.2s ease;
 }
 
-.proximo-turno.shade-dia {
-  border-color: rgba(255, 179, 161, 0.35);
-  border-left-color: var(--cal-dia-to);
-}
-
-.proximo-turno.shade-noche {
-  border-color: rgba(155, 102, 255, 0.35);
-  border-left-color: var(--cal-noche-from);
+.proximo-turno.variant-inline {
+  background: transparent;
+  border: none;
+  padding: 1.25rem 0 0 0;
+  border-radius: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 1.25rem;
 }
 
 .icono-mini {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  background-color: var(--color-primary-light);
-  border: 1px solid #3a3a3a;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-ios-inner);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
   color: var(--text-primary);
+  position: relative;
+  overflow: hidden;
 }
 
 .shade-dia .icono-mini {
   background: linear-gradient(135deg, var(--cal-dia-from), var(--cal-dia-to));
-  border-color: rgba(255, 179, 161, 0.35);
+  border-color: rgba(255, 179, 161, 0.2);
   color: #fff;
 }
 
 .shade-noche .icono-mini {
   background: linear-gradient(135deg, var(--cal-noche-from), var(--cal-noche-to));
-  border-color: rgba(155, 102, 255, 0.35);
+  border-color: rgba(155, 102, 255, 0.2);
+  color: #fff;
+}
+
+.shade-vacaciones .icono-mini {
+  background: linear-gradient(135deg, var(--cal-vacaciones-from), var(--cal-vacaciones-to));
+  border-color: rgba(45, 212, 160, 0.2);
   color: #fff;
 }
 
 .icon-sm {
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
+}
+
+.icon-img {
+  object-fit: contain;
 }
 
 .contenido {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  flex-grow: 1;
 }
 
 .etiqueta {
   font-size: 0.65rem;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
   color: var(--text-secondary);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.15rem;
+  text-transform: uppercase;
+}
+
+.turno-fecha-flex {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
 }
 
 .nombre-turno {
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   margin: 0;
   color: var(--text-primary);
 }
 
-.shade-dia .nombre-turno {
-  color: var(--cal-dia-from);
-}
-
-.shade-noche .nombre-turno {
-  color: var(--cal-noche-from);
+.separador-dot {
+  color: var(--text-secondary);
+  font-weight: bold;
+  font-size: 0.85rem;
 }
 
 .fecha-turno {
@@ -125,5 +154,28 @@ defineProps({
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.chevron {
+  color: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chevron svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Badge de extra — esquina inferior derecha */
+.badge-extra {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-bottom: 12px solid rgba(255, 255, 255, 0.35);
+  border-left: 12px solid transparent;
 }
 </style>

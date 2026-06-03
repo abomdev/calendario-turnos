@@ -1,17 +1,18 @@
 <template>
   <div class="bottom-nav-wrapper">
     <nav class="bottom-nav" aria-label="Navegación principal">
-      <RouterLink to="/" class="nav-item" active-class="active">
-        <Home class="icon" aria-hidden="true" />
-        <span class="nav-label">Inicio</span>
-      </RouterLink>
-      <RouterLink to="/calendario" class="nav-item" active-class="active">
-        <Calendar class="icon" aria-hidden="true" />
-        <span class="nav-label">Calendario</span>
-      </RouterLink>
-      <RouterLink to="/configuracion" class="nav-item" active-class="active">
-        <Settings class="icon" aria-hidden="true" />
-        <span class="nav-label">Configuración</span>
+      <RouterLink
+        v-for="item in navItems"
+        :key="item.to"
+        :to="item.to"
+        class="nav-item"
+        active-class="active"
+        :exact="item.exact"
+      >
+        <span class="nav-bubble">
+          <component :is="item.icon" class="icon" aria-hidden="true" />
+        </span>
+        <span class="nav-label">{{ item.label }}</span>
       </RouterLink>
     </nav>
   </div>
@@ -20,6 +21,12 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import { Home, Calendar, Settings } from '@lucide/vue'
+
+const navItems = [
+  { to: '/',             label: 'Inicio',       icon: Home,     exact: true },
+  { to: '/calendario',   label: 'Calendario',   icon: Calendar, exact: false },
+  { to: '/configuracion', label: 'Config',      icon: Settings, exact: false },
+]
 </script>
 
 <style scoped>
@@ -32,71 +39,86 @@ import { Home, Calendar, Settings } from '@lucide/vue'
   max-width: 22rem;
   z-index: 100;
   pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .bottom-nav {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.25rem;
-  padding: 0.375rem 0.5rem;
+  align-items: flex-end;
+  justify-content: space-around;
+  padding: 0.5rem 0.75rem 0.625rem;
   background-color: #2a2a2a;
-  border: 1px solid var(--color-primary-light);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 9999px;
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.35),
-    0 1px 3px rgba(0, 0, 0, 0.2);
+    0 4px 24px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(61, 121, 242, 0.15),
+    0 1px 3px rgba(0, 0, 0, 0.25);
   pointer-events: auto;
 }
 
+/* ── Cada item ── */
 .nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  text-decoration: none;
+  flex: 1;
+  padding: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* ── Burbuja del ícono ── */
+.nav-bubble {
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem;
-  border-radius: 9999px;
-  text-decoration: none;
-  color: var(--text-secondary);
+  background-color: transparent;
   transition:
     background-color 0.25s ease,
-    color 0.25s ease,
-    padding 0.25s ease,
-    box-shadow 0.25s ease;
-  flex: 0 0 auto;
+    box-shadow 0.25s ease,
+    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.nav-item.active {
-  flex: 1 1 auto;
-  padding: 0.625rem 1.125rem;
-  background-color: var(--text-primary);
-  color: var(--bg-color);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+/* ── Label ── */
+.nav-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-secondary, #888);
+  white-space: nowrap;
+  transition: color 0.25s ease;
 }
 
+/* ── Ícono base ── */
 .icon {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
+  stroke-width: 2px;
+  color: var(--text-secondary, #888);
+  transition: color 0.25s ease;
+}
+
+/* ── Estado ACTIVO ── */
+.nav-item.active .nav-bubble {
+  background-color: var(--text-primary, #f3f4f6);
+  box-shadow:
+    0 -4px 12px rgba(0, 0, 0, 0.35),
+    0 2px 6px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
+}
+
+.nav-item.active .icon {
+  color: var(--bg-color, #16171d);
   stroke-width: 2.25px;
 }
 
-.nav-label {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-  max-width: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition:
-    max-width 0.3s ease,
-    opacity 0.2s ease;
-}
-
 .nav-item.active .nav-label {
-  max-width: 7.5rem;
-  opacity: 1;
+  color: var(--text-primary, #f3f4f6);
+  font-weight: 700;
 }
 </style>

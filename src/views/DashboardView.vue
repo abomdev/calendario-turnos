@@ -2,8 +2,13 @@
   <main class="dashboard-view">
     <header class="header">
       <div class="saludo">
-        <p class="saludo-texto">{{ saludoDinamico }}</p>
-        <h1 class="titulo">Tu turno de hoy</h1>
+        <template v-if="configStore.nombre">
+          <p class="saludo-sub">{{ saludoPeriodo }}</p>
+          <h1 class="saludo-nombre">{{ configStore.nombre }}</h1>
+        </template>
+        <template v-else>
+          <h1 class="saludo-nombre">{{ saludoPeriodo }}</h1>
+        </template>
       </div>
     </header>
 
@@ -13,9 +18,8 @@
     </div>
 
     <div v-else class="contenido">
-      <TarjetaTurnoHoy :turno="turnoHoy" />
+      <TarjetaTurnoHoy :turno="turnoHoy" :proximoInfo="proximoTurno" />
       <StripSemanal />
-      <ProximoTurno v-if="proximoTurno" :proximoInfo="proximoTurno" />
     </div>
   </main>
 </template>
@@ -34,17 +38,15 @@ const { getTurnoHoy, getProximoTurno } = useTurnos()
 const turnoHoy = computed(() => getTurnoHoy())
 const proximoTurno = computed(() => getProximoTurno())
 
-const saludoDinamico = computed(() => {
+const saludoPeriodo = computed(() => {
   const hora = new Date().getHours()
-  let saludo = '¡Hola!'
   if (hora >= 6 && hora < 12) {
-    saludo = 'Buenos días'
+    return 'Buenos días'
   } else if (hora >= 12 && hora < 20) {
-    saludo = 'Buenas tardes'
+    return 'Buenas tardes'
   } else {
-    saludo = 'Buenas noches'
+    return 'Buenas noches'
   }
-  return `${saludo}${configStore.nombre ? ', ' + configStore.nombre : ''}`
 })
 </script>
 
@@ -55,19 +57,29 @@ const saludoDinamico = computed(() => {
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.75rem;
 }
 
-.header .saludo-texto {
+.header {
+  padding-top: 0.5rem;
+  padding-bottom: 0.25rem;
+}
+
+.saludo-sub {
   color: var(--text-secondary);
-  font-size: 1rem;
-  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.15rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.header .titulo {
+.saludo-nombre {
+  font-size: 2.25rem;
+  font-weight: 800;
   color: var(--text-primary);
-  font-size: 1.75rem;
-  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
 }
 
 .contenido {

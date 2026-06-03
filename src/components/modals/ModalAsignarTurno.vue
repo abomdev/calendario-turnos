@@ -19,7 +19,7 @@
       <div class="turno-base-info" v-if="esVacaciones">
         <p class="etiqueta">ESTADO DEL DÍA</p>
         <div class="turno-badge vacaciones-badge">
-          🌴 Vacaciones
+          Vacaciones
         </div>
         <p class="vacaciones-msg">Este día está programado como vacaciones. Puedes gestionar tus periodos de vacaciones en la pestaña de Configuración.</p>
       </div>

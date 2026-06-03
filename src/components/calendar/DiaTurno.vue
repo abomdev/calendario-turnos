@@ -12,7 +12,7 @@
     <span class="dia-numero">{{ numeroDia }}</span>
 
     <span v-if="feriado" class="badge-feriado" :title="feriado.nombre">
-      <img src="/info.svg" alt="" class="badge-feriado-icon" aria-hidden="true" />
+      <Info class="badge-feriado-icon" aria-hidden="true" />
     </span>
 
     <!-- Icono de turno: sol o luna SVG -->
@@ -25,8 +25,6 @@
       </svg>
       <!-- Noche -->
       <svg v-else-if="turno.id === 'N' || turno.id === 'EN'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M13.5 8H16.5L13.5 11H16.5M18 2H22L18 6H22"/>
-        <path d="M21.25 12C21.25 17.11 17.11 21.25 12 21.25C6.89 21.25 2.75 17.11 2.75 12C2.75 6.89 6.89 2.75 12 2.75C11.91 2.75 11.81 2.71 11.73 2.63C11.65 2.55 11.65 2.36 11.76 2.29C9.66 3.56 8.25 5.87 8.25 8.5C8.25 12.5 11.5 15.75 15.5 15.75C17.59 15.75 19.42 14.86 20.68 13.44C21.71 12.28 21.25 12 21.25 12Z" fill="currentColor" opacity="0.3"/>
         <path d="M21.25 12C21.25 17.11 17.11 21.25 12 21.25C6.89 21.25 2.75 17.11 2.75 12C2.75 6.89 6.89 2.75 12 2.75"/>
         <path d="M15.5 14.25C12.32 14.25 9.75 11.68 9.75 8.5C9.75 6.41 10.86 4.58 12.53 3.57"/>
       </svg>
@@ -40,6 +38,7 @@
 <script setup>
 import { computed } from 'vue'
 import { isToday, isSameMonth, format } from 'date-fns'
+import { Info } from '@lucide/vue'
 
 const props = defineProps({
   fecha:      { type: Date,    required: true },
@@ -106,19 +105,16 @@ const esMesActual = computed(() => isSameMonth(props.fecha, props.mesActual))
 .dia-turno.shade-descanso {
   background-color: transparent;
   border-style: dashed;
-  border-color: #444;
-  opacity: 0.6;
+  border-color: rgba(255, 255, 255, 0.30);
+  opacity: 0.85;
 }
 
-/* Vacaciones → rayas diagonales sutiles */
+/* Vacaciones → gradiente verde esmeralda */
 .dia-turno.shade-vacaciones {
-  background-image: repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 4px,
-    rgba(255,255,255,0.04) 4px,
-    rgba(255,255,255,0.04) 8px
-  );
+  background: linear-gradient(155deg, var(--cal-vacaciones-from) 0%, var(--cal-vacaciones-to) 100%);
+  border-color: rgba(45, 212, 160, 0.4);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .dia-numero {
@@ -156,6 +152,7 @@ const esMesActual = computed(() => isSameMonth(props.fecha, props.mesActual))
 }
 
 .shade-vacaciones .turno-icon {
+  color: rgba(255, 255, 255, 0.95);
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
 }
 
@@ -170,10 +167,11 @@ const esMesActual = computed(() => isSameMonth(props.fecha, props.mesActual))
 }
 
 .badge-feriado-icon {
-  width: 12px;
-  height: 12px;
-  object-fit: contain;
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45));
+  width: 14px;
+  height: 14px;
+  color: var(--cal-feriado);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
+  stroke-width: 2.5px;
 }
 
 /* Badge de extra — esquina inferior derecha */

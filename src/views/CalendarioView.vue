@@ -16,7 +16,7 @@
           <span>{{ tipo.nombre }}</span>
         </div>
         <div class="item-leyenda">
-          <span class="color-dot" :style="{ backgroundColor: 'var(--color-vacaciones)' }"></span>
+          <span class="color-dot dot-vacaciones"></span>
           <span>Vacaciones</span>
         </div>
         <div class="item-leyenda">
@@ -86,9 +86,11 @@ function cerrarModal() {
 }
 
 .header h1 {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
   margin: 0;
+  color: var(--text-primary);
 }
 
 .leyenda {
@@ -128,6 +130,10 @@ function cerrarModal() {
 .color-dot.dot-descanso {
   background: transparent;
   border: 1.5px dashed #555;
+}
+
+.color-dot.dot-vacaciones {
+  background: linear-gradient(135deg, var(--cal-vacaciones-from), var(--cal-vacaciones-to));
 }
 
 .color-dot.dot-feriado {

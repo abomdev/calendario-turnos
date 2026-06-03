@@ -13,6 +13,14 @@
 
   /* Sin colores de turno — diferenciación por shade/icono */
   --color-sin-asignar: #2a2a2a;
+
+  /* Estilos iOS / Apple */
+  --radius-ios-card: 16px;
+  --radius-ios-inner: 12px;
+  --glass-bg: rgba(38, 38, 38, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --shadow-ios: 0 4px 20px rgba(0, 0, 0, 0.25);
+  --system-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Compact Text", "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
 }
 
 * {
@@ -22,7 +30,7 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--system-font), 'Inter', sans-serif;
   background-color: var(--bg-color);
   color: var(--text-primary);
   line-height: 1.5;
