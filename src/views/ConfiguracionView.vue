@@ -48,7 +48,7 @@
           </div>
         </div>
         <div class="ayuda-fila">
-          <p class="ayuda-texto">Selecciona el día en que tuviste tu último turno de día. <br> Se generará el ciclo de 4 días: Día - Noche - Descanso - Descanso.</p>
+          <p class="ayuda-texto">Selecciona tu último turno de día. <br> Se generará el ciclo de 4 días. <br> 1 turno de día, 1 de noche y 2 días de descanso.</p>
         </div>
       </div>
     </div>
@@ -137,12 +137,8 @@
             </div>
             <div class="fila-derecha">
               <button @click.stop="eliminarPeriodo(periodo.id)" class="btn-eliminar-row">
-                <svg viewBox="0 0 24 24" fill="none" class="icon-trash" stroke="currentColor" stroke-width="2">
-                  <polyline points="3 6 5 6 21 6" />
-                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                  <line x1="10" y1="11" x2="10" y2="17" />
-                  <line x1="14" y1="11" x2="14" y2="17" />
-                </svg>
+                <Trash2 class="btn-eliminar-icon" />
+                Eliminar
               </button>
             </div>
           </div>
@@ -268,7 +264,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { Bug } from '@lucide/vue'
+import { Bug, Trash2 } from '@lucide/vue'
 import { Icon } from '@iconify/vue'
 import { useConfigStore } from '@/stores/configStore'
 import { useTurnosStore } from '@/stores/turnosStore'
@@ -390,10 +386,10 @@ function eliminarPeriodo(id) {
 
 <style scoped>
 .configuracion-view {
-  padding: 1.5rem;
+  padding: 1.5rem 0.75rem;
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
+  gap: 1.5rem;
 }
 
 .header h1 {
@@ -619,25 +615,32 @@ function eliminarPeriodo(id) {
 }
 
 .btn-eliminar-row {
-  background: none;
-  border: none;
-  color: #ff3b30; /* iOS Destructive Red */
-  padding: 0.5rem;
-  border-radius: 50%;
-  cursor: pointer;
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.15s;
+  gap: 0.4rem;
+  background-color: rgba(239, 68, 68, 0.12);
+  border: 1px solid #ef4444;
+  color: #fca5a5;
+  padding: 0.6rem 0.8rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  font-size: 0.8rem;
+  width: auto;
+  min-width: 90px;
 }
 
 .btn-eliminar-row:active {
-  background-color: rgba(255, 59, 48, 0.12);
+  background-color: rgba(239, 68, 68, 0.22);
 }
 
-.icon-trash {
-  width: 16px;
-  height: 16px;
+.btn-eliminar-icon {
+  width: 18px;
+  height: 18px;
 }
 
 /* Switch iOS */

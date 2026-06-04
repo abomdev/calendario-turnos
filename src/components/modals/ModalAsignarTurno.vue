@@ -26,34 +26,39 @@
 
       <template v-else>
         <div class="turno-base-info" v-if="turnoBase">
-          <p class="etiqueta">TURNO BASE (CICLO)</p>
+          <p class="etiqueta">TURNO ACTUAL</p>
           <div class="turno-badge" :style="turnoBaseStyle">
             {{ turnoBase.nombre }}
           </div>
         </div>
         <div class="turno-base-info" v-else>
-          <p class="etiqueta">TURNO BASE (CICLO)</p>
+          <p class="etiqueta">TURNO ACTUAL</p>
           <div class="turno-badge sin-asignar">No configurado</div>
         </div>
 
         <div class="opciones-extra">
-          <p class="etiqueta">SOBRESCRIBIR CON EXTRA</p>
+          <p class="etiqueta">SOBRESCRIBIR</p>
+          <p class="extra-desc">Selecciona el turno extra que te corresponda.</p>
           
           <div class="botones-grid">
             <button 
-              class="btn-extra" 
+              class="btn-extra btn-dia" 
               :class="{ active: turnoExtraId === 'ED' }"
               @click="seleccionarExtra('ED')"
             >
+              <img src="/sun.svg" alt="" class="btn-extra-icon" aria-hidden="true" />
               Extra Día
+              <div class="badge-extra-btn"></div>
             </button>
             
             <button 
-              class="btn-extra" 
+              class="btn-extra btn-noche" 
               :class="{ active: turnoExtraId === 'EN' }"
               @click="seleccionarExtra('EN')"
             >
+              <Moon class="btn-extra-icon" />
               Extra Noche
+              <div class="badge-extra-btn"></div>
             </button>
             
             <button 
@@ -61,8 +66,8 @@
               v-if="turnoExtraId"
               @click="quitarExtra"
             >
-              <img src="/trash.svg" alt="" class="btn-quitar-icon" aria-hidden="true" />
-              Quitar Extra
+              <Trash2 class="btn-extra-icon" />
+              Eliminar
             </button>
           </div>
         </div>
@@ -75,7 +80,7 @@
 import { computed } from 'vue'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { X } from '@lucide/vue'
+import { X, Trash2, Moon } from '@lucide/vue'
 import { useTurnosStore } from '@/stores/turnosStore'
 import { useConfigStore } from '@/stores/configStore'
 import { obtenerTurnoBase } from '@/utils/generadorCiclo'
@@ -293,6 +298,13 @@ function quitarExtra() {
   margin-top: 1.5rem;
 }
 
+.extra-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
 .botones-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -303,34 +315,64 @@ function quitarExtra() {
   background-color: var(--bg-card);
   border: 1px solid var(--color-primary-light);
   color: var(--text-primary);
-  padding: 1rem;
+  padding: 0.85rem 1rem;
   border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  position: relative;
+  overflow: hidden;
 }
 
-.btn-extra:nth-child(1) {
-  /* Extra Dia */
-}
-.btn-extra:nth-child(1).active {
+.btn-dia {
   background: linear-gradient(135deg, var(--cal-dia-from), var(--cal-dia-to));
   border-color: rgba(255, 179, 161, 0.35);
-  color: #ffffff;
+  color: #fff;
 }
 
-.btn-extra:nth-child(2) {
-  /* Extra Noche */
-}
-.btn-extra:nth-child(2).active {
+.btn-noche {
   background: linear-gradient(135deg, var(--cal-noche-from), var(--cal-noche-to));
   border-color: rgba(155, 102, 255, 0.35);
-  color: #ffffff;
+  color: #fff;
+}
+
+.badge-extra-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-bottom: 12px solid rgba(255, 255, 255, 0.3);
+  border-left: 12px solid transparent;
+}
+
+.btn-extra-icon {
+  width: 22px;
+  height: 22px;
+  filter: brightness(0) invert(1);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.btn-extra:nth-child(1).active {
+  box-shadow: 0 0 0 2px #fff inset;
+}
+
+.btn-extra:nth-child(2).active {
+  box-shadow: 0 0 0 2px #fff inset;
 }
 
 .btn-quitar {
   grid-column: 1 / -1;
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;

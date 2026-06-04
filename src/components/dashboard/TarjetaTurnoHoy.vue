@@ -2,10 +2,12 @@
   <div class="tarjeta-turno" :class="turno ? `shade-${turno.shade}` : ''">
     <div class="card-content">
       <div class="fecha-container">
-        <div class="etiqueta-hoy">
-          <span>HOY</span>
+        <div class="fecha-row">
+          <span class="fecha">{{ fechaFormateada }}</span>
+          <div class="etiqueta-hoy">
+            <span>HOY</span>
+          </div>
         </div>
-        <span class="fecha">{{ fechaFormateada }}</span>
         <div v-if="feriadoHoy" class="feriado-badge">
           <svg class="icon-feriado" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"/>
@@ -126,15 +128,22 @@ function getDescripcion(id) {
   margin-bottom: 1.25rem;
 }
 
+.fecha-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
 .etiqueta-hoy {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  letter-spacing: 1.5px;
-  color: var(--text-secondary);
-  margin-bottom: 0.15rem;
+  letter-spacing: 1px;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
 }
 
 .dot-hoy {

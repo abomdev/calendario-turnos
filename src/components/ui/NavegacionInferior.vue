@@ -25,7 +25,7 @@ import { Home, Calendar, Settings } from '@lucide/vue'
 const navItems = [
   { to: '/',             label: 'Inicio',       icon: Home,     exact: true },
   { to: '/calendario',   label: 'Calendario',   icon: Calendar, exact: false },
-  { to: '/configuracion', label: 'Config',      icon: Settings, exact: false },
+  { to: '/configuracion', label: 'Ajustes',      icon: Settings, exact: false },
 ]
 </script>
 
